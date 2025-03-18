@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Header from './components/Header'
 import PostCard from './components/PostCard'
+import WritePost from './components/WritePost'
+import { useWallet } from './hooks/useWallet'
+import { web3Service } from './services/web3'
 
 const mockPosts = [
   {
@@ -22,33 +25,49 @@ const mockPosts = [
 ]
 
 function App() {
-  const [isConnected, setIsConnected] = useState(false)
-  const [account, setAccount] = useState<string>()
+  const { isConnected, account, connect } = useWallet()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleConnect = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts',
-        })
-        setAccount(accounts[0])
-        setIsConnected(true)
-      } catch (error) {
-        console.error('Failed to connect wallet:', error)
-      }
-    } else {
-      alert('Please install MetaMask!')
+  const handleSubmitPost = async (title: string, content: string) => {
+    setIsSubmitting(true)
+    try {
+      // In a real app, we would upload content to IPFS first
+      const mockIpfsHash = `Qm${Math.random().toString(36).substring(2, 15)}`
+
+      // For now, just simulate the transaction
+      console.log('Creating post:', { title, content, ipfsHash: mockIpfsHash })
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 2000))
+    } catch (error) {
+      console.error('Failed to create post:', error)
+      throw error
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  const handleTip = (postId: number) => {
-    console.log('Tipping post:', postId)
+  const handleTip = async (postId: number) => {
+    if (!isConnected) {
+      alert('Please connect your wallet first!')
+      return
+    }
+
+    try {
+      const amount = prompt('Enter tip amount in ETH (e.g., 0.01):')
+      if (!amount) return
+
+      console.log('Tipping post:', postId, 'Amount:', amount)
+      // await web3Service.tipPost(postId, amount)
+    } catch (error) {
+      console.error('Failed to tip post:', error)
+    }
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header
-        onConnect={handleConnect}
+        onConnect={connect}
         isConnected={isConnected}
         account={account}
       />
@@ -82,6 +101,13 @@ function App() {
           </div>
         )}
       </main>
+
+      {isConnected && (
+        <WritePost
+          onSubmit={handleSubmitPost}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </div>
   )
 }
