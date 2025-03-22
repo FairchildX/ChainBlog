@@ -1,27 +1,48 @@
 # Dependencies
 node_modules/
 .pnp
+.pnp.js
+
+# Production
+dist/
+build/
 
 # Cache
-.claude
 .cache
+.claude
 
 # Environment variables
 .env
 .env.local
 .env.development.local
-
-# Production
-dist/
+.env.test.local
+.env.production.local
 
 CLAUDE.md
 
 # Logs
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# OS generated files
+Thumbs.db

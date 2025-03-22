@@ -51,12 +51,13 @@ export default function PostCard({ post, onTip }: PostCardProps) {
         <div className="flex space-x-2">
           <button
             onClick={() => onTip(post.id)}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm transition-colors"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm transition-colors flex items-center space-x-1"
           >
-            Tip
+            <span>💰</span>
+            <span>Tip</span>
           </button>
-          <button className="text-blue-600 hover:text-blue-800 text-sm">
-            Read more
+          <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            Read more →
           </button>
         </div>
       </div>
